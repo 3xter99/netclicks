@@ -20,8 +20,8 @@ const leftMenu = document.querySelector('.left-menu');
  description = document.querySelector('.description'),
  modalLink = document.querySelector('.modal__link'),
  searchForm = document.querySelector('.search__form'),
- searchFormInput = document.querySelector('.search__form-input');
-     // preloader = document.querySelector('.preloader')
+ searchFormInput = document.querySelector('.search__form-input'),
+ preloader = document.querySelector('.preloader');
 
 const loading = document.createElement('div');
 loading.className = 'loading';
@@ -167,11 +167,13 @@ tvShowsList.addEventListener('click', event => {
     const card = target.closest('.tv-card');
 
     if (card) {
-        tvShows.append(loading);
+        // tvShows.append(loading);
+        preloader.style.display = 'block';
         new DBService().getTvShow(card.id)
             .then(data => {
                 console.log(data)
-                loading.remove();
+
+                // loading.remove();
                 console.log(data.poster_path);
                                    tvCardImg.src = IMG_URL + data.poster_path; // меняем картинку
                     modalTitle.textContent = data.name; // меняем название
@@ -184,11 +186,15 @@ tvShowsList.addEventListener('click', event => {
                     modalLink.href = data.homepage;
 
 
+
             })
 
             .then(() => {
                 document.body.style.overflow = 'hidden';
                 modal.classList.remove('hide');
+            })
+            .then(() => {
+                preloader.style.display = '';
             })
 
     }
