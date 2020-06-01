@@ -21,7 +21,9 @@ const leftMenu = document.querySelector('.left-menu');
  modalLink = document.querySelector('.modal__link'),
  searchForm = document.querySelector('.search__form'),
  searchFormInput = document.querySelector('.search__form-input'),
- preloader = document.querySelector('.preloader');
+ preloader = document.querySelector('.preloader'),
+ dropdown = document.querySelectorAll('.dropdown'),
+ tvShowsHead = document.querySelector('.tv-shows__head');
 
 const loading = document.createElement('div');
 loading.className = 'loading';
@@ -63,6 +65,17 @@ class DBService {
 const renderCard= response => {
     console.log(response);
     tvShowsList.textContent = '';
+
+    if (!response.total_results) {
+        loading.remove();
+        tvShowsHead.textContent = 'К сожалению по вашему запросу ничего не найдено...';
+        tvShowsHead.style.cssText = 'color: red;';
+        return;
+
+    }
+    tvShowsHead.textContent = 'Результат поиска';
+    tvShowsHead.style.cssText = 'color: black;';
+
     response.results.forEach(item => {
         const {
             backdrop_path: backdrop,
@@ -111,12 +124,18 @@ searchForm.addEventListener('submit', event => {
 
 // -----------------------------------
 
+const closeDropdown = () => {
+    dropdown.forEach(item => {
+        console.log(item);
+    })
+}
 
 // открытие закрытие меню
 
 hamburger.addEventListener('click', () => {
    leftMenu.classList.toggle('openMenu')
     hamburger.classList.toggle('open');
+    closeDropdown();
 });
 
 document.addEventListener('click', event => {
@@ -124,7 +143,9 @@ document.addEventListener('click', event => {
     if (!target.closest('.left-menu')) {
         leftMenu.classList.remove('openMenu');
         hamburger.classList.remove('open');
+        closeDropdown();
     }
+
 });
 
 leftMenu.addEventListener('click', event => {
