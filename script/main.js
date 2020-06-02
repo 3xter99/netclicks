@@ -127,7 +127,7 @@ searchForm.addEventListener('submit', event => {
     const value = searchFormInput.value.trim();
     if (value) {
         tvShows.append(loading);
-        new DBService().getSearchResult(value).then(renderCard);
+        dbService.getSearchResult(value).then(renderCard);
     }
     searchFormInput.value = '';
 
@@ -223,7 +223,7 @@ tvShowsList.addEventListener('click', event => {
     if (card) {
         // tvShows.append(loading);
         preloader.style.display = 'block';
-        new DBService().getTvShow(card.id)
+        dbService.getTvShow(card.id)
             .then(({
                 poster_path: posterPath,
                 name: title,
