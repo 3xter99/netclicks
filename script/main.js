@@ -23,7 +23,9 @@ const leftMenu = document.querySelector('.left-menu');
  searchFormInput = document.querySelector('.search__form-input'),
  preloader = document.querySelector('.preloader'),
  dropdown = document.querySelectorAll('.dropdown'),
- tvShowsHead = document.querySelector('.tv-shows__head');
+ tvShowsHead = document.querySelector('.tv-shows__head'),
+ posterWrapper = document.querySelector('.poster__wrapper'),
+ modalContent = document.querySelector('.modal__content');
 
 const loading = document.createElement('div');
 loading.className = 'loading';
@@ -157,6 +159,27 @@ leftMenu.addEventListener('click', event => {
         leftMenu.classList.add('openMenu');
         hamburger.classList.add('open');
     }
+
+    if (target.closest('#top-rated')) {
+        console.log('top-rated');
+
+    }
+
+    if (target.closest('#popular')) {
+        console.log('popular');
+
+    }
+
+    if (target.closest('#week')) {
+        console.log('week');
+
+    }
+
+    if (target.closest('#today')) {
+        console.log('today');
+
+    }
+
 });
 
 
@@ -191,22 +214,33 @@ tvShowsList.addEventListener('click', event => {
         // tvShows.append(loading);
         preloader.style.display = 'block';
         new DBService().getTvShow(card.id)
-            .then(data => {
-                console.log(data)
+            .then(({
+                poster_path: posterPath,
+                name: title,
+                genres,
+                vote_average: voteAverage,
+                overview,
+                homepage }) => {
+                 // loading.remove();
 
-                // loading.remove();
-                console.log(data.poster_path);
-                                   tvCardImg.src = IMG_URL + data.poster_path; // меняем картинку
-                    modalTitle.textContent = data.name; // меняем название
+                    if (posterPath) {
+                        tvCardImg.src = IMG_URL + posterPath; // меняем картинку
+                        tvCardImg.alt = title;
+                        posterWrapper.style.display = '';
+                    } else {
+                        posterWrapper.style.display = 'none';
+                        modalContent.style.paddingLeft = '25px';
+                    }
+
+
+                    modalTitle.textContent = title; // меняем название
                     genresList.textContent = '';  // очищаем жанры
-                    data.genres.forEach(item => {
+                    genres.forEach(item => {
                         genresList.innerHTML += `<li>${item.name}</li>`;    // Добавляем жанры
                     });
-                    rating.textContent = data.vote_average;
-                    description.textContent = data.overview;
-                    modalLink.href = data.homepage;
-
-
+                    rating.textContent = voteAverage;
+                    description.textContent = overview;
+                    modalLink.href = homepage;
 
             })
 
