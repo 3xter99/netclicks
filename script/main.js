@@ -62,7 +62,17 @@ class DBService {
 
     getTvShow = id => this.getData(`${this.SERVER}/tv/${id}?api_key=${this.API_KEY}&language=ru-RU`);
 
+    getTopRated = () => this.getData(`${this.SERVER}/tv/top_rated?api_key=${this.API_KEY}&language=ru-RU`);
+
+    getPopular = () => this.getData(`${this.SERVER}/tv/popular?api_key=${this.API_KEY}&language=ru-RU`);
+
+    getToDay = () => this.getData(`${this.SERVER}/tv/airing_today?api_key=${this.API_KEY}&language=ru-RU`);
+
+    getWeek = () => this.getData(`${this.SERVER}/tv/on_the_air?api_key=${this.API_KEY}&language=ru-RU`);
+
 }
+
+const dbService = new DBService();
 
 const renderCard= response => {
     console.log(response);
@@ -161,22 +171,22 @@ leftMenu.addEventListener('click', event => {
     }
 
     if (target.closest('#top-rated')) {
-        console.log('top-rated');
+        dbService.getTopRated().then(renderCard);
 
     }
 
     if (target.closest('#popular')) {
-        console.log('popular');
+        dbService.getPopular().then(renderCard);
 
     }
 
     if (target.closest('#week')) {
-        console.log('week');
+        dbService.getWeek().then(renderCard);
 
     }
 
     if (target.closest('#today')) {
-        console.log('today');
+        dbService.getToDay().then(renderCard);
 
     }
 
